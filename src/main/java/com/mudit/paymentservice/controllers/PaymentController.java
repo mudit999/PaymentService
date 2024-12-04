@@ -3,6 +3,7 @@ package com.mudit.paymentservice.controllers;
 import com.mudit.paymentservice.dtos.GeneratePaymentLinkRequestDto;
 import com.mudit.paymentservice.services.PaymentService;
 import com.razorpay.RazorpayException;
+import com.stripe.exception.StripeException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,12 +14,12 @@ public class PaymentController {
 
     private PaymentService paymentService;
 
-    public PaymentController(@Qualifier("razorpay") PaymentService paymentService){
+    public PaymentController(@Qualifier("stripe") PaymentService paymentService){
         this.paymentService = paymentService;
     }
 
     @PostMapping("/payments")
-    public String generatePaymentLink(@RequestBody GeneratePaymentLinkRequestDto generatePaymentLinkRequestDto) throws RazorpayException {
+    public String generatePaymentLink(@RequestBody GeneratePaymentLinkRequestDto generatePaymentLinkRequestDto) throws StripeException, RazorpayException {
         // return payment link
         return paymentService.generatePaymentLink(generatePaymentLinkRequestDto.orderId);
     }
